@@ -28,6 +28,12 @@ func (r *Router) RegisterRoute() {
 	stockHandler := handlers.NewStockHandler(stockUsecase)
 	stockRoute := r.route.PathPrefix("/api/v1").Subrouter()
 	stockRoute.Handle("/stocks", http.HandlerFunc(stockHandler.GetAllStocks)).Methods("GET")
+	// Bond endpoint
+	bondRepository := repository.NewBondRepository(db)
+	bondUsecase := usecases.NewBondUseCase(bondRepository)
+	bondHandler := handlers.NewBondHandler(bondUsecase)
+	bondRoute := r.route.PathPrefix("/api/v1").Subrouter()
+	bondRoute.Handle("/bonds/search", http.HandlerFunc(bondHandler.GetBonds)).Methods("GET")
 }
 
 func (r *Router) Run(addr string) error {
