@@ -20,6 +20,20 @@ func NewBondHandler(useCase usecases.BondUseCase) *BondHandler {
 	}
 }
 
+// GetBonds godoc
+// @Summary      Search bonds
+// @Description  Search bonds by coupon rate and maturity date
+// @Tags         bonds
+// @Accept       json
+// @Produce      json
+// @Param        minCoupon      query     number  false  "Minimum coupon rate"
+// @Param        maxCoupon      query     number  false  "Maximum coupon rate"
+// @Param        maturityBefore query     string  false  "Maturity before (YYYY-MM-DD)"
+// @Param        maturityAfter  query     string  false  "Maturity after (YYYY-MM-DD)"
+// @Success      200   {array}   domain.Bond
+// @Failure      400   {object}  utils.StandardResponse
+// @Failure      500   {object}  utils.StandardResponse
+// @Router       /api/v1/bonds/search [get]
 func (h *BondHandler) GetBonds(w http.ResponseWriter, r *http.Request) {
 	minCouponStr := r.URL.Query().Get("minCoupon")
 	maxCouponStr := r.URL.Query().Get("maxCoupon")

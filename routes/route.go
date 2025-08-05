@@ -10,6 +10,7 @@ import (
 
 	"github.com/gorilla/mux"
 	"github.com/rs/cors"
+	httpSwagger "github.com/swaggo/http-swagger"
 )
 
 type Router struct {
@@ -42,6 +43,7 @@ func (r *Router) RegisterRoute() {
 	cmspRoute := r.route.PathPrefix("/api/v1").Subrouter()
 	cmspRoute.Handle("/cmsp", http.HandlerFunc(cmspHandler.GetAllCMSPs)).Methods("GET")
 	cmspRoute.Handle("/cmsp/{id:[0-9]+}", http.HandlerFunc(cmspHandler.GetCMSPByID)).Methods("GET")
+	r.route.PathPrefix("/swagger/").Handler(httpSwagger.WrapHandler)
 }
 
 func (r *Router) Run(addr string) error {

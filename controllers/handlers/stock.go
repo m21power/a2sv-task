@@ -17,6 +17,16 @@ func NewStockHandler(useCase usecases.StockUseCase) *StockHandler {
 	}
 }
 
+// StockHandler godoc
+// @Summary      List all stocks
+// @Description  Get all stocks, optionally filter by gainer or loser
+// @Tags         stocks
+// @Accept       json
+// @Produce      json
+// @Param        type  query     string  false  "gainer or loser"
+// @Success      200   {array}   domain.Stock
+// @Failure      500   {object}  utils.StandardResponse
+// @Router       /api/v1/stocks [get]
 func (h *StockHandler) GetAllStocks(w http.ResponseWriter, r *http.Request) {
 	filterType := r.URL.Query().Get("type")
 	stock, err := h.stockUseCase.GetAllStocks()

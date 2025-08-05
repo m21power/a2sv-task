@@ -1,6 +1,7 @@
 package main
 
 import (
+	_ "task/docs"
 	"task/routes"
 
 	"github.com/gorilla/mux"

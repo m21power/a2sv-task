@@ -22,6 +22,19 @@ func NewCMSPHandler(useCase usecases.CMSPUseCase) *CMSPHandler {
 	}
 }
 
+// GetAllCMSPs godoc
+// @Summary      List all CMSPs
+// @Description  Get all Capital Market Service Providers, filter by type or license date
+// @Tags         cmsp
+// @Accept       json
+// @Produce      json
+// @Param        type            query     string  false  "CMSP type"
+// @Param        licensedBefore  query     string  false  "Licensed before (YYYY-MM-DD)"
+// @Param        licensedAfter   query     string  false  "Licensed after (YYYY-MM-DD)"
+// @Success      200   {array}   domain.CMSP
+// @Failure      400   {object}  utils.StandardResponse
+// @Failure      500   {object}  utils.StandardResponse
+// @Router       /api/v1/cmsp [get]
 func (h *CMSPHandler) GetAllCMSPs(w http.ResponseWriter, r *http.Request) {
 	layout := "2006-01-02"
 
@@ -57,6 +70,17 @@ func (h *CMSPHandler) GetAllCMSPs(w http.ResponseWriter, r *http.Request) {
 	utils.WriteJSON(w, http.StatusOK, cmsp)
 }
 
+// GetCMSPByID godoc
+// @Summary      Get CMSP by ID
+// @Description  Get a Capital Market Service Provider by its ID
+// @Tags         cmsp
+// @Accept       json
+// @Produce      json
+// @Param        id   path      int  true  "CMSP ID"
+// @Success      200  {object}  domain.CMSP
+// @Failure      400  {object}  utils.StandardResponse
+// @Failure      404  {object}  utils.StandardResponse
+// @Router       /api/v1/cmsp/{id} [get]
 func (h *CMSPHandler) GetCMSPByID(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	idStr := vars["id"]
