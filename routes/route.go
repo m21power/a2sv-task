@@ -44,6 +44,12 @@ func (r *Router) RegisterRoute() {
 	cmspRoute.Handle("/cmsp", http.HandlerFunc(cmspHandler.GetAllCMSPs)).Methods("GET")
 	cmspRoute.Handle("/cmsp/{id:[0-9]+}", http.HandlerFunc(cmspHandler.GetCMSPByID)).Methods("GET")
 	r.route.PathPrefix("/swagger/").Handler(httpSwagger.WrapHandler)
+	// Portfolio endpoint
+	portfolioRepository := repository.NewPortRecomRepository(db)
+	portfolioUsecase := usecases.NewPortfolioRecommendationUseCase(portfolioRepository)
+	portfolioHandler := handlers.NewPortRecommHandler(*portfolioUsecase)
+	portfolioRoute := r.route.PathPrefix("/api/v1").Subrouter()
+	portfolioRoute.Handle("/portfolio/recommendation", http.HandlerFunc(portfolioHandler.RecommendPortfolio)).Methods("POST")
 }
 
 func (r *Router) Run(addr string) error {

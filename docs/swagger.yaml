@@ -1,4 +1,13 @@
 definitions:
+  domain.Asset:
+    properties:
+      Amount:
+        type: number
+      Name:
+        type: string
+      Yield:
+        type: number
+    type: object
   domain.Bond:
     properties:
       couponRate:
@@ -30,6 +39,30 @@ definitions:
         type: string
       type:
         type: string
+    type: object
+  domain.PortfolioRequest:
+    properties:
+      initialCapital:
+        type: number
+      profile:
+        type: string
+      targetGoal:
+        type: number
+    type: object
+  domain.PortfolioResponse:
+    properties:
+      Bond:
+        $ref: '#/definitions/domain.Asset'
+      Cash:
+        $ref: '#/definitions/domain.Asset'
+      GapToGoal:
+        type: number
+      GoalMet:
+        type: boolean
+      Stock:
+        $ref: '#/definitions/domain.Asset'
+      TotalReturn:
+        type: number
     type: object
   domain.Stock:
     properties:
@@ -169,6 +202,32 @@ paths:
       summary: Get CMSP by ID
       tags:
       - cmsp
+  /api/v1/portfolio/recommendation:
+    post:
+      consumes:
+      - application/json
+      description: Get a recommended portfolio allocation based on user profile
+      parameters:
+      - description: Portfolio request body
+        in: body
+        name: profile
+        required: true
+        schema:
+          $ref: '#/definitions/domain.PortfolioRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.PortfolioResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.StandardResponse'
+      summary: Recommend a portfolio
+      tags:
+      - portfolio
   /api/v1/stocks:
     get:
       consumes:

@@ -181,6 +181,46 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/v1/portfolio/recommendation": {
+            "post": {
+                "description": "Get a recommended portfolio allocation based on user profile",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "portfolio"
+                ],
+                "summary": "Recommend a portfolio",
+                "parameters": [
+                    {
+                        "description": "Portfolio request body",
+                        "name": "profile",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/domain.PortfolioRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/domain.PortfolioResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/utils.StandardResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/stocks": {
             "get": {
                 "description": "Get all stocks, optionally filter by gainer or loser",
@@ -223,6 +263,20 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "domain.Asset": {
+            "type": "object",
+            "properties": {
+                "Amount": {
+                    "type": "number"
+                },
+                "Name": {
+                    "type": "string"
+                },
+                "Yield": {
+                    "type": "number"
+                }
+            }
+        },
         "domain.Bond": {
             "type": "object",
             "properties": {
@@ -269,6 +323,43 @@ const docTemplate = `{
                 },
                 "type": {
                     "type": "string"
+                }
+            }
+        },
+        "domain.PortfolioRequest": {
+            "type": "object",
+            "properties": {
+                "initialCapital": {
+                    "type": "number"
+                },
+                "profile": {
+                    "type": "string"
+                },
+                "targetGoal": {
+                    "type": "number"
+                }
+            }
+        },
+        "domain.PortfolioResponse": {
+            "type": "object",
+            "properties": {
+                "Bond": {
+                    "$ref": "#/definitions/domain.Asset"
+                },
+                "Cash": {
+                    "$ref": "#/definitions/domain.Asset"
+                },
+                "GapToGoal": {
+                    "type": "number"
+                },
+                "GoalMet": {
+                    "type": "boolean"
+                },
+                "Stock": {
+                    "$ref": "#/definitions/domain.Asset"
+                },
+                "TotalReturn": {
+                    "type": "number"
                 }
             }
         },
