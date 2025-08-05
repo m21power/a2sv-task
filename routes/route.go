@@ -34,6 +34,14 @@ func (r *Router) RegisterRoute() {
 	bondHandler := handlers.NewBondHandler(bondUsecase)
 	bondRoute := r.route.PathPrefix("/api/v1").Subrouter()
 	bondRoute.Handle("/bonds/search", http.HandlerFunc(bondHandler.GetBonds)).Methods("GET")
+
+	// CMSP endpoint
+	cmspRepository := repository.NewCMSPRepository(db)
+	cmspUsecase := usecases.NewCMSPUseCase(cmspRepository)
+	cmspHandler := handlers.NewCMSPHandler(*cmspUsecase)
+	cmspRoute := r.route.PathPrefix("/api/v1").Subrouter()
+	cmspRoute.Handle("/cmsp", http.HandlerFunc(cmspHandler.GetAllCMSPs)).Methods("GET")
+	cmspRoute.Handle("/cmsp/{id:[0-9]+}", http.HandlerFunc(cmspHandler.GetCMSPByID)).Methods("GET")
 }
 
 func (r *Router) Run(addr string) error {
