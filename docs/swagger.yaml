@@ -1,4 +1,17 @@
 definitions:
+  domain.APIResponse:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/domain.DerivedYearData'
+        type: array
+      metadata:
+        items:
+          $ref: '#/definitions/domain.IndicatorMeta'
+        type: array
+      source:
+        type: string
+    type: object
   domain.Asset:
     properties:
       Amount:
@@ -38,6 +51,32 @@ definitions:
       source:
         type: string
       type:
+        type: string
+    type: object
+  domain.DerivedYearData:
+    properties:
+      exchange_rate:
+        type: number
+      foreign_reserves:
+        type: number
+      gdp_growth:
+        type: number
+      govt_debt_gdp:
+        type: number
+      real_interest_rate:
+        type: number
+      year:
+        type: integer
+    type: object
+  domain.IndicatorMeta:
+    properties:
+      description:
+        type: string
+      indicator:
+        type: string
+      name:
+        type: string
+      unit:
         type: string
     type: object
   domain.PortfolioRequest:
@@ -202,6 +241,25 @@ paths:
       summary: Get CMSP by ID
       tags:
       - cmsp
+  /api/v1/economic-indicators:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve key economic indicators for Ethiopia
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.APIResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.StandardResponse'
+      summary: Get economic indicators
+      tags:
+      - economic-indicators
   /api/v1/portfolio/recommendation:
     post:
       consumes:

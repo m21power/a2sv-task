@@ -50,6 +50,12 @@ func (r *Router) RegisterRoute() {
 	portfolioHandler := handlers.NewPortRecommHandler(*portfolioUsecase)
 	portfolioRoute := r.route.PathPrefix("/api/v1").Subrouter()
 	portfolioRoute.Handle("/portfolio/recommendation", http.HandlerFunc(portfolioHandler.RecommendPortfolio)).Methods("POST")
+	// Economic Indicator endpoint
+	economicIndicatorRepository := repository.NewEconomicIndicatorRepository(db)
+	economicIndicatorUseCase := usecases.NewEconomicIndicatorUseCase(economicIndicatorRepository)
+	economicIndicatorHandler := handlers.NewEconomicIndicatorHandler(*economicIndicatorUseCase)
+	economicIndicatorRoute := r.route.PathPrefix("/api/v1").Subrouter()
+	economicIndicatorRoute.Handle("/economic-indicators", http.HandlerFunc(economicIndicatorHandler.GetEconomicIndicators)).Methods("GET")
 }
 
 func (r *Router) Run(addr string) error {

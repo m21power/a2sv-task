@@ -170,6 +170,35 @@
                 }
             }
         },
+        "/api/v1/economic-indicators": {
+            "get": {
+                "description": "Retrieve key economic indicators for Ethiopia",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "economic-indicators"
+                ],
+                "summary": "Get economic indicators",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/domain.APIResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/utils.StandardResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/portfolio/recommendation": {
             "post": {
                 "description": "Get a recommended portfolio allocation based on user profile",
@@ -252,6 +281,26 @@
         }
     },
     "definitions": {
+        "domain.APIResponse": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/domain.DerivedYearData"
+                    }
+                },
+                "metadata": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/domain.IndicatorMeta"
+                    }
+                },
+                "source": {
+                    "type": "string"
+                }
+            }
+        },
         "domain.Asset": {
             "type": "object",
             "properties": {
@@ -311,6 +360,46 @@
                     "type": "string"
                 },
                 "type": {
+                    "type": "string"
+                }
+            }
+        },
+        "domain.DerivedYearData": {
+            "type": "object",
+            "properties": {
+                "exchange_rate": {
+                    "type": "number"
+                },
+                "foreign_reserves": {
+                    "type": "number"
+                },
+                "gdp_growth": {
+                    "type": "number"
+                },
+                "govt_debt_gdp": {
+                    "type": "number"
+                },
+                "real_interest_rate": {
+                    "type": "number"
+                },
+                "year": {
+                    "type": "integer"
+                }
+            }
+        },
+        "domain.IndicatorMeta": {
+            "type": "object",
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "indicator": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "unit": {
                     "type": "string"
                 }
             }
